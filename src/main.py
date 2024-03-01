@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException, Request
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
+from utils.fub_utils import FUB
 
 
 load_dotenv()
@@ -17,14 +18,14 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 app = FastAPI()
 
 
-@app.on_event("startup")
-async def startup_event():
-    log_server_start()
+# @app.on_event("startup")
+# async def startup_event():
+#     log_server_start()
 
 
-@app.on_event("shutdown")
-async def startup_event():
-    log_server_stop()
+# @app.on_event("shutdown")
+# async def startup_event():
+#     log_server_stop()
 
 
 @app.get("/")
@@ -43,4 +44,7 @@ async def sms(request: EventSchema):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, port=int(SERVER_PORT), host="127.0.0.1")
+    # uvicorn.run(app=app, port=int(SERVER_PORT), host="127.0.0.1")
+    fub = FUB()
+
+    fub.get_note(21472)
