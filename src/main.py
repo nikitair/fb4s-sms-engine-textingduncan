@@ -1,5 +1,12 @@
-from fastapi import FastAPI, Request, HTTPException
+import os
+from dotenv import load_dotenv
 import uvicorn
+from fastapi import FastAPI, Request, HTTPException
+
+load_dotenv()
+
+SERVER_PORT = os.getenv("SERVER_PORT")
+SERVER_HOST = os.getenv("SERVER_HOST")
 
 
 app = FastAPI()
@@ -16,4 +23,4 @@ def sms(request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, port=8000, host="0.0.0.0")
+    uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
