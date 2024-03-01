@@ -1,8 +1,10 @@
 import os
+import sys
 from dotenv import load_dotenv
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from schemas.fub_webhook_schemas import EventSchema
+
 
 load_dotenv()
 
@@ -28,4 +30,4 @@ async def sms(request: EventSchema):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
+    uvicorn.run(app=app, port=int(SERVER_PORT), host="127.0.0.1")
