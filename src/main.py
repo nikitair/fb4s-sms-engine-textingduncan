@@ -29,6 +29,8 @@ async def startup_event():
 @app.get("/")
 async def index():
     logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
+>>>>>>>>> Temporary merge branch 2
+    return {"success": True, "message": "Hello World"}
 
 
 @app.post("/sms")

@@ -29,7 +29,3 @@ def forward_note_to_buyer_by_sms(note_id: int) -> bool:
 
                 # send sms
                 ...
-                    
-
-            
-
