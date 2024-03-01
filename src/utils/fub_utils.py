@@ -1,4 +1,5 @@
 import os
+import traceback
 import requests
 from dotenv import load_dotenv
 from logs.logging_config import logger
@@ -33,9 +34,8 @@ class FUB:
         try:
             response["data"] = response.json()
             logger.info(f"{self.get_note.__name__} -- FUB API RESPONSE - {response['data']}")
-        except Exception as ex:
-            logger.error(f"{self.get_note.__name__} -- !!! FUB API ERROR - {ex}")
-
+        except Exception:
+            logger.exception(f"{self.get_note.__name__} -- !!! FUB API ERROR")
         if status_code == 200: 
             result["success"] = True
 
@@ -60,8 +60,8 @@ class FUB:
         try:
             response["data"] = response.json()
             logger.info(f"{self.get_buyer.__name__} -- FUB API RESPONSE - {response['data']}")
-        except Exception as ex:
-            logger.error(f"{self.get_buyer.__name__} -- !!! FUB API ERROR - {ex}")
+        except Exception:
+            logger.exception(f"{self.get_buyer.__name__} -- !!! FUB API ERROR")
 
         if status_code == 200: 
             result["success"] = True
