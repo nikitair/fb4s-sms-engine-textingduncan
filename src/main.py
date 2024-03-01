@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
+import uvicorn
+
 
 app = FastAPI()
 
@@ -9,5 +11,9 @@ def index():
 
 
 @app.post("/sms")
-def sms():
-    ...
+def sms(request: Request):
+    return {"success": True, "message": "Hello World", "data": request}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app=app, port=8000, host="0.0.0.0")
