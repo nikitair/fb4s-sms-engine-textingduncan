@@ -5,7 +5,6 @@ from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
-from utils.fub_utils import FUB
 
 
 load_dotenv()
