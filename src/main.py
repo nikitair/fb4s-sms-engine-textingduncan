@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 import uvicorn
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from schemas.fub_webhooks_schemas import EventSchema
 
 load_dotenv()
 
@@ -18,7 +19,10 @@ def index():
 
 
 @app.post("/sms")
-def sms(request: Request):
+def sms(request: EventSchema):
+
+    print(request.json())
+
     return {"success": True, "message": "Hello World", "data": request}
 
 
