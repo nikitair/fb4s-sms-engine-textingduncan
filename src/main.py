@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from schemas.fub_webhook_schemas import EventSchema
+from logs.logging_config import logger
 
 
 load_dotenv()
@@ -17,14 +18,15 @@ app = FastAPI()
 
 @app.get("/")
 async def index():
+    logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
     return {"success": True, "message": "Hello World"}
 
 
 @app.post("/sms")
 async def sms(request: EventSchema):
 
-    data = dict(request)
-    print(data)
+    logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
+    logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {dict(request)}")
 
     return {"success": True, "message": "Hello World", "data": request}
 
