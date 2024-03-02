@@ -43,8 +43,10 @@ async def sms(request: EventSchema):
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
 
-    return {"success": True, "message": "Hello World", "data": result}
+    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
+
+    return {"success": True, "data": result}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, port=int(SERVER_PORT), host="127.0.0.1")
+    uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
