@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
@@ -33,7 +34,7 @@ async def shutdown_event():
 async def index():
     logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
     # return {"success": True, "message": "Hello World"}
-    return texts.app_logo
+    return HTMLResponse(content=texts.app_logo, status_code=200)
 
 
 @app.post("/sms")
