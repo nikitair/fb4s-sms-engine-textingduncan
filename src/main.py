@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
-from logs.logging_utils import log_server_start, log_server_stop
+# from logs.logging_utils import log_server_start, log_server_stop
 from views.sms_views import send_note_to_buyer_by_sms_view
 
 
@@ -17,14 +17,15 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 app = FastAPI()
 
 
-@app.on_event("startup")
-async def startup_event():
-    log_server_start()
+# TODO: find the better solution
+# @app.on_event("startup")
+# async def startup_event():
+#     log_server_start()
 
 
-@app.on_event("shutdown")
-async def startup_event():
-    log_server_stop()
+# @app.on_event("shutdown")
+# async def startup_event():
+#     log_server_stop()
 
 
 @app.get("/")

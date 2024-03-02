@@ -17,7 +17,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
     # get note data
     note_data = fub.get_note(note_id)
 
-    if note_data["success"] == True:
+    if note_data["success"] is True:
 
         # get buyer_id and note message for sms
         buyer_id = note_data["data"]["personId"]
@@ -28,7 +28,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         # get buyer data
         buyer_data = fub.get_buyer(buyer_id)
 
-        if buyer_data["success"] == True:
+        if buyer_data["success"] is True:
 
             buyer_name = buyer_data["data"]["name"]
             result["contact_name"] = buyer_name
@@ -36,7 +36,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
             buyer_phones = buyer_data["data"]["phones"]
 
             # get buyer phone number
-            buyer_phone = buyer_phones[0]["value"] if buyer_phones and type(buyer_phones) == list else None
+            buyer_phone = buyer_phones[0]["value"] if buyer_phones and isinstance(buyer_phones, list) else None
 
             logger.info(f"{send_note_to_buyer_by_sms_view.__name__} -- BUYER NAME - {buyer_name}; BUYER PHONE - {buyer_phone}")
 
