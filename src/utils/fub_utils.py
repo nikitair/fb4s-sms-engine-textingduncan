@@ -33,7 +33,7 @@ class FUB:
 
         try:
             result["data"] = response.json()
-            logger.info(f"{self.get_note.__name__} -- FUB API RESPONSE - {response['data']}")
+            logger.info(f"{self.get_note.__name__} -- FUB API RESPONSE - {result['data']}")
         except Exception:
             logger.exception(f"{self.get_note.__name__} -- !!! FUB API ERROR")
         if status_code == 200: 
