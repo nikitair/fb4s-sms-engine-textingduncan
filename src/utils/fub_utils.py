@@ -32,7 +32,7 @@ class FUB:
         logger.info(f"{self.get_note.__name__} -- FUB API STATUS CODE - {status_code}")
 
         try:
-            response["data"] = response.json()
+            result["data"] = response.json()
             logger.info(f"{self.get_note.__name__} -- FUB API RESPONSE - {response['data']}")
         except Exception:
             logger.exception(f"{self.get_note.__name__} -- !!! FUB API ERROR")
@@ -58,7 +58,7 @@ class FUB:
         logger.info(f"{self.get_buyer.__name__} -- FUB API STATUS CODE - {status_code}")
 
         try:
-            response["data"] = response.json()
+            result["data"] = response.json()
             logger.info(f"{self.get_buyer.__name__} -- FUB API RESPONSE - {response['data']}")
         except Exception:
             logger.exception(f"{self.get_buyer.__name__} -- !!! FUB API ERROR")
