@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
+from views.sms_views import send_note_to_buyer_by_sms_view
 
 
 load_dotenv()
@@ -37,6 +38,10 @@ async def sms(request: EventSchema):
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {dict(request)}")
+
+    note_ids = request.resourceIds
+    if note_ids:
+        send_note_to_buyer_by_sms_view(note_ids[0])
 
     return {"success": True, "message": "Hello World", "data": request}
 
