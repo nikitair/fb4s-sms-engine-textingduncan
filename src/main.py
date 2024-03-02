@@ -6,6 +6,7 @@ from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
 from views.sms_views import send_note_to_buyer_by_sms_view
+from static import texts
 
 
 load_dotenv()
@@ -31,7 +32,8 @@ async def shutdown_event():
 @app.get("/")
 async def index():
     logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
-    return {"success": True, "message": "Hello World"}
+    # return {"success": True, "message": "Hello World"}
+    return texts.app_logo
 
 
 @app.post("/sms")
