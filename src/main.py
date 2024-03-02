@@ -41,9 +41,9 @@ async def sms(request: EventSchema):
 
     note_ids = request.resourceIds
     if note_ids:
-        send_note_to_buyer_by_sms_view(note_ids[0])
+        result = send_note_to_buyer_by_sms_view(note_ids[0])
 
-    return {"success": True, "message": "Hello World", "data": request}
+    return {"success": True, "message": "Hello World", "data": result}
 
 
 if __name__ == "__main__":
