@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
+from views.sms_views import send_note_to_buyer_by_sms_view
+from static import texts
 
 
 load_dotenv()
@@ -16,13 +18,14 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 app = FastAPI()
 
 
+# TODO: find the better solution
 @app.on_event("startup")
 async def startup_event():
     log_server_start()
 
 
 @app.on_event("shutdown")
-async def startup_event():
+async def shutdown_event():
     log_server_stop()
 
 
@@ -38,8 +41,14 @@ async def sms(request: EventSchema):
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {dict(request)}")
 
-    return {"success": True, "message": "Hello World", "data": request}
+    note_ids = request.resourceIds
+    if note_ids:
+        result = send_note_to_buyer_by_sms_view(note_ids[0])
+
+    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
+
+    return {"success": True, "data": result}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, port=int(SERVER_PORT), host="127.0.0.1")
+    uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
