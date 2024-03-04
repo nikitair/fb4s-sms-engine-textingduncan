@@ -16,4 +16,3 @@ def format_phone_number(phone_number: str):
     except Exception as ex:
         logger.warning(f"{format_phone_number.__name__} -- ! FAILED FORMATTING - {phone_number} - {ex}")
     return phone_number_formatted
-

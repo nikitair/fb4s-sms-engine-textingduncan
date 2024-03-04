@@ -14,7 +14,7 @@ class Twilio:
 
     def __init__(self):
         self.client = Client(self.TWILIO_SID, self.TWILIO_AUTH_TOKEN)
-        logger.info(f"Twilio-- TWILIO CLASS INITIALIZED")
+        logger.info("Twilio -- TWILIO CLASS INITIALIZED")
 
     def send_sms(self, phone_number, message):
         phone_number = format_phone_number(phone_number)
@@ -39,7 +39,7 @@ class Twilio:
 
         except Exception:
             logger.error(f"{self.send_sms.__name__} -- !!! TWILIO ERROR")
-        
+
         return result
 
     def sms_status(self, sid):
@@ -54,10 +54,10 @@ class Twilio:
             logger.error(f"{self.sms_status.__name__} -- !!! TWILIO ERROR")
 
         return True if status == "delivered" else False
-    
 
     def __str__(self):
-        return "Twillio"
+        return "Twilio"
+
 
 if __name__ == "__main__":
     twilio = Twilio()
