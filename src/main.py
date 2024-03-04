@@ -39,20 +39,12 @@ async def index():
 @app.post("/sms")
 async def sms(request: EventSchema):
 
-    backup_payload = {
-        "payload": None,
-        "response": None,
-        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M UTC')
-    }
-
     payload = dict(request)
     with open("database/backups.json", "r") as f:
-        json_data: list = json.load(f)
+        all_backups: list = json.load(f)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
-
-
 
     note_ids = request.resourceIds
     if note_ids:
@@ -60,13 +52,16 @@ async def sms(request: EventSchema):
 
     logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
 
-    backup_payload["payload"] = payload
-    backup_payload["response"] = result
+    new_backup = {
+        "payload": payload,
+        "response": result,
+        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M UTC')
+    }
 
-    json_data.append(backup_payload)
+    all_backups.append(new_backup)
 
     with open("database/backups.json", "w") as f:
-        json.dump(json_data, f, indent=4)
+        json.dump(all_backups, f, indent=4)
 
     return {"success": True, "data": result}
 
