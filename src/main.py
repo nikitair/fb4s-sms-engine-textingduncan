@@ -38,17 +38,19 @@ async def index():
 @app.post("/sms")
 async def sms(request: EventSchema):
 
-    data = dict(request)
+    backup_payload = {
+        "payload": None,
+        "response": None
+    }
+
+    payload = dict(request)
     with open("data/payloads.json", "r") as f:
-        existed_payloads: list = json.load(f)
+        json_data: list = json.load(f)
 
-    existed_payloads.append(data)
-
-    with open("data/payloads.json", "w") as f:
-        json.dump(existed_payloads, f, indent=4)
+    json_data.append(data)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
-    logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {data}")
+    logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
 
 
 
@@ -57,6 +59,12 @@ async def sms(request: EventSchema):
         result = send_note_to_buyer_by_sms_view(note_ids[0])
 
     logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
+
+    backup_payload["payload"] = payload
+    backup_payload["response"] = result
+
+    with open("data/payloads.json", "w") as f:
+        json.dump(backup_payload, f, indent=4)
 
     return {"success": True, "data": result}
 
