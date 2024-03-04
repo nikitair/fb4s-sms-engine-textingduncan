@@ -64,7 +64,7 @@ async def sms(request: EventSchema):
     backup_payload["response"] = result
 
     with open("data/payloads.json", "w") as f:
-        json.dump(backup_payload, f, indent=4)
+        json.dump(json_data, f, indent=4)
 
     return {"success": True, "data": result}
 
