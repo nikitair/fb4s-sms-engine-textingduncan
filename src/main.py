@@ -47,8 +47,6 @@ async def sms(request: EventSchema):
     with open("data/payloads.json", "r") as f:
         json_data: list = json.load(f)
 
-    json_data.append(payload)
-
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
 
@@ -62,6 +60,8 @@ async def sms(request: EventSchema):
 
     backup_payload["payload"] = payload
     backup_payload["response"] = result
+
+    json_data.append(backup_payload)
 
     with open("data/payloads.json", "w") as f:
         json.dump(json_data, f, indent=4)
