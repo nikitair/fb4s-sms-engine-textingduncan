@@ -6,3 +6,4 @@ env
 *.log
 sandbox.py
 backup.json
+.vscode
