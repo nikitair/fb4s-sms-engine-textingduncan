@@ -42,7 +42,7 @@ async def sms(request: EventSchema):
     backup_payload = {
         "payload": None,
         "response": None,
-        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M UTC')
     }
 
     payload = dict(request)
