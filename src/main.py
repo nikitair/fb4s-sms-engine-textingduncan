@@ -1,6 +1,7 @@
 import os
 import json
 import uvicorn
+import datetime
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
@@ -40,7 +41,8 @@ async def sms(request: EventSchema):
 
     backup_payload = {
         "payload": None,
-        "response": None
+        "response": None,
+        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
     }
 
     payload = dict(request)
