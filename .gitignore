@@ -5,3 +5,4 @@ env
 *pycache*
 *.log
 sandbox.py
+payloads.json
