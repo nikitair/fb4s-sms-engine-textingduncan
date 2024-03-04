@@ -5,7 +5,7 @@ from static import texts
 def log_server_start():
     logger.info("")
     logger.info("=== SERVER STARTED ===\n")
-    logger.info(f"{texts.app_logo}\n")
+    logger.info(f"{texts.app_logo1}\n")
 
 
 def log_server_stop():
