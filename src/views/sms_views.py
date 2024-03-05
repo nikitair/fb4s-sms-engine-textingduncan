@@ -1,4 +1,6 @@
+import time
 from utils.fub_utils import FUB
+from utils.twilio_utils import Twilio
 from logs.logging_config import logger
 
 
@@ -13,6 +15,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
     }
 
     fub = FUB()
+    twilio = Twilio()
 
     # get note data
     note_data = fub.get_note(note_id)
@@ -44,6 +47,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 result["contact_phone"] = buyer_phone
 
                 # send sms
-                ...
+                sending_result = twilio.send_sms(buyer_phone, note_message)
+                result["sms_sent"] = sending_result["success"]
 
     return result
