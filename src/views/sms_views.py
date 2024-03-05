@@ -24,14 +24,13 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         # get buyer_id and note message for sms
         buyer_id = note_data["data"]["personId"]
         note_message: str = note_data["data"]["body"]
-        note_message = note_message.replace("[scheduled] ", "")
 
         result["sms_text"] = note_message
 
         # get buyer data
         buyer_data = fub.get_buyer(buyer_id)
 
-        if buyer_data["success"] is True:
+        if buyer_data["success"] is True and "[scheduled]" in note_message:
 
             buyer_name = buyer_data["data"]["name"]
             result["contact_name"] = buyer_name
@@ -45,6 +44,8 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
 
             if buyer_phone:
                 result["contact_phone"] = buyer_phone
+
+                note_message = note_message.replace("[scheduled] ", "")
 
                 # send sms
                 sending_result = twilio.send_sms(buyer_phone, note_message)
