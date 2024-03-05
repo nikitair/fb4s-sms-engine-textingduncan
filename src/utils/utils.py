@@ -1,5 +1,6 @@
 import phonenumbers
 from logs.logging_config import logger
+import requests
 # from schemas.fub_webhook_schemas import EventSchema
 
 
@@ -24,3 +25,16 @@ def backup_request_response(func):
     decorator to backup api requests and responses
     """
     ...
+
+
+def notify_team_by_email(email_text: str):
+    response = requests.post(
+        url="https://api.retool.com/v1/workflows/bb40dd15-f40f-4565-a671-ecbb0d06a575/startTrigger?workflowApiKey=retool_wk_26708f61a11642369c829a57dd42bbc5",
+        json={
+            "email": "nikita@actse.ltd",
+            "template": email_text,
+            "subject": "Texting Duncan Event"
+            }
+    )
+    if response.status_code == 200:
+        return True
