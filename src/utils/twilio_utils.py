@@ -32,13 +32,13 @@ class Twilio:
                 from_=os.getenv("TWILIO_FROM_NUMBER"),
                 to=phone_number
             )
-            logger.info(f"{self.send_sms.__name__} -- TWILIO - STATUS - {sms.status}")
+            logger.info(f"{self.send_sms.__name__} -- TWILIO - SID - {sms.sid}; STATUS - {sms.status}")
 
             result["success"] = True if sms.status in ("delivered", "queued", "sending", "sent", "receiving", "received", "accepted") else False
             result["sms_id"] = sms.sid
 
         except Exception:
-            logger.error(f"{self.send_sms.__name__} -- !!! TWILIO ERROR")
+            logger.exception(f"{self.send_sms.__name__} -- !!! TWILIO ERROR")
 
         return result
 
@@ -51,7 +51,7 @@ class Twilio:
             # status = self.client.messages(sid).fetch().error_code
             logger.info(f"{self.sms_status.__name__} -- TWILIO - DELIVERY STATUS - {status}")
         except Exception:
-            logger.error(f"{self.sms_status.__name__} -- !!! TWILIO ERROR")
+            logger.exception(f"{self.sms_status.__name__} -- !!! TWILIO ERROR")
 
         return True if status == "delivered" else False
 
