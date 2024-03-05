@@ -33,7 +33,7 @@ async def shutdown_event():
 @app.get("/")
 async def index():
     logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
-    return {"success": True, "message": "Hello World"}
+    return {"success": True, "message": "SMS Engine Index"}
 
 
 @app.post("/sms")
