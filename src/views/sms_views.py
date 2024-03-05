@@ -23,7 +23,8 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
 
         # get buyer_id and note message for sms
         buyer_id = note_data["data"]["personId"]
-        note_message = note_data["data"]["body"]
+        note_message: str = note_data["data"]["body"]
+        note_message = note_message.replace("[scheduled] ", "")
 
         result["sms_text"] = note_message
 
