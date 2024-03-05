@@ -39,6 +39,7 @@ async def index():
 @app.post("/sms")
 async def sms(request: EventSchema):
 
+    result = None
     payload = dict(request)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
@@ -47,8 +48,7 @@ async def sms(request: EventSchema):
     note_ids = payload["resourceIds"]
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
-
-    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - {result}")
+        logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - {result}")
 
     backup_data = {
         "request": payload,
@@ -71,7 +71,7 @@ async def sms(request: EventSchema):
         logger.info(f"{sms.__name__} -- BACKED UP DATA")
 
     return {
-        "success": True if result["sms_sent"] else False,
+        "success": True if result.get("sms_sent") else False,
         "data": result
         }
 
