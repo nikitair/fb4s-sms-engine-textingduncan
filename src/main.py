@@ -44,7 +44,7 @@ async def sms(request: EventSchema):
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
 
-    note_ids = request.resourceIds
+    note_ids = payload["resourceIds"]
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
 
