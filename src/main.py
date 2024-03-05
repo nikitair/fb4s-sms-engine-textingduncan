@@ -67,7 +67,7 @@ async def sms(request: EventSchema):
     backups.append(backup_data)
 
     with open("database/backups.json", "w") as f:
-        json.dump(backups, f)
+        json.dump(backups, f, indent=4)
         logger.info(f"{sms.__name__} -- BACKED UP DATA")
 
     return {
