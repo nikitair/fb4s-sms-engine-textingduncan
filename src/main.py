@@ -58,12 +58,15 @@ async def sms(request: EventSchema):
 
     # temporary backing up data to json
     logger.info(f"{sms.__name__} -- BACKING UP DATA")
-    with open("database/backups.json", "a+") as f:
-        backups = json.load(f)
-        if not isinstance(backups, list):
-            backups = []
-        backups.append(backup_data)
-        f.seek(0)
+    try:
+        with open("database/backups.json", "r") as f:
+            backups = json.load(f)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        backups = []
+
+    backups.append(backup_data)
+
+    with open("database/backups.json", "w") as f:
         json.dump(backups, f)
         logger.info(f"{sms.__name__} -- BACKED UP DATA")
 
