@@ -46,7 +46,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 result["contact_phone"] = buyer_phone
 
                 # send sms
-                sending_result = twilio.send_sms(buyer_phone, note_message)
-                result["sms_sent"] = sending_result["success"]
+                # sending_result = twilio.send_sms(buyer_phone, note_message)
+                # result["sms_sent"] = sending_result["success"]
 
     return result

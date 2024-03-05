@@ -57,6 +57,7 @@ async def sms(request: EventSchema):
     }
 
     # temporary backing up data to json
+    logger.info(f"{sms.__name__} -- BACKING UP DATA")
     with open("database/backups.json", "a+") as f:
         backups = json.load(f)
         if not isinstance(backups, list):
@@ -64,7 +65,7 @@ async def sms(request: EventSchema):
         backups.append(backup_data)
         f.seek(0)
         json.dump(backups, f)
-        logger.info(f"{sms.__name__} -- BACKUP DATA")
+        logger.info(f"{sms.__name__} -- BACKED UP DATA")
 
     return {
         "success": True if result["sms_sent"] else False,
