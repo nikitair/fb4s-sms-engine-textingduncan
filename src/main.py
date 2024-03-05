@@ -19,7 +19,6 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 app = FastAPI()
 
 
-# TODO: find the better solution
 @app.on_event("startup")
 async def startup_event():
     log_server_start()

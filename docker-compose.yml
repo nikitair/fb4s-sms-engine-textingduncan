@@ -1,7 +1,8 @@
 version: '3.8'
 
 services:
-  fb4s-sms-engine:
+  app:
+    container_name: texting-duncan
     build: .
     ports:
       - "8000:8000"
