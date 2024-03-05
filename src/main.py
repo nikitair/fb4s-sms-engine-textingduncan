@@ -8,6 +8,7 @@ from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
 from views.sms_views import send_note_to_buyer_by_sms_view
+# from utils.utils import backup_request_response
 
 
 load_dotenv()
@@ -39,8 +40,6 @@ async def index():
 async def sms(request: EventSchema):
 
     payload = dict(request)
-    with open("database/backups.json", "r") as f:
-        all_backups: list = json.load(f)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
@@ -49,20 +48,28 @@ async def sms(request: EventSchema):
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
 
-    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
+    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - {result}")
 
-    new_backup = {
-        "payload": payload,
+    backup_data = {
+        "request": payload,
         "response": result,
-        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M UTC')
+        "created_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M UTC")
     }
 
-    all_backups.append(new_backup)
+    # temporary backing up data to json
+    with open("database/backups.json", "a+") as f:
+        backups = json.load(f)
+        if not isinstance(backups, list):
+            backups = []
+        backups.append(backup_data)
+        f.seek(0)
+        json.dump(backups, f)
+        logger.info(f"{sms.__name__} -- BACKUP DATA")
 
-    with open("database/backups.json", "w") as f:
-        json.dump(all_backups, f, indent=4)
-
-    return {"success": True, "data": result}
+    return {
+        "success": True if result["sms_sent"] else False,
+        "data": result
+        }
 
 
 if __name__ == "__main__":

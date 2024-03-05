@@ -1,4 +1,3 @@
-import time
 from utils.fub_utils import FUB
 from utils.twilio_utils import Twilio
 from logs.logging_config import logger

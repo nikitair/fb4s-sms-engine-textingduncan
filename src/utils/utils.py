@@ -1,5 +1,6 @@
 import phonenumbers
 from logs.logging_config import logger
+# from schemas.fub_webhook_schemas import EventSchema
 
 
 def format_phone_number(phone_number: str):
@@ -16,3 +17,10 @@ def format_phone_number(phone_number: str):
     except Exception as ex:
         logger.warning(f"{format_phone_number.__name__} -- ! FAILED FORMATTING - {phone_number} - {ex}")
     return phone_number_formatted
+
+
+def backup_request_response(func):
+    """
+    decorator to backup api requests and responses
+    """
+    ...
