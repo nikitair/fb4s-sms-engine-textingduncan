@@ -25,7 +25,7 @@ th.setFormatter(formatter)
 logger.addHandler(th)
 
 # File output
-log_filename = datetime.utcnow().strftime('logs/logs_%Y-%m-%d.log')
+log_filename = datetime.utcnow().strftime('logs/logs.log')
 fh = logging.FileHandler(log_filename)
 fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
