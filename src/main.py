@@ -39,7 +39,7 @@ async def index():
 @app.post("/sms")
 async def sms(request: EventSchema):
 
-    result = None
+    result = {}
     payload = dict(request)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
