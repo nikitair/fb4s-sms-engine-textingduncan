@@ -5,4 +5,7 @@ env
 *pycache*
 *.log
 sandbox.py
-payloads.json
+backup.json
+.vscode
+sandbox.py
+

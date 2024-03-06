@@ -1,13 +1,14 @@
 import os
 import json
 import uvicorn
-import datetime
+from datetime import datetime
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
 from views.sms_views import send_note_to_buyer_by_sms_view
+# from utils.utils import backup_request_response
 
 
 load_dotenv()
@@ -19,7 +20,6 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 app = FastAPI()
 
 
-# TODO: find the better solution
 @app.on_event("startup")
 async def startup_event():
     log_server_start()
@@ -33,42 +33,46 @@ async def shutdown_event():
 @app.get("/")
 async def index():
     logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
-    return {"success": True, "message": "Hello World"}
+    return {"success": True, "message": "SMS Engine Index"}
 
 
 @app.post("/sms")
 async def sms(request: EventSchema):
-
-    backup_payload = {
-        "payload": None,
-        "response": None,
-        "created_at": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M UTC')
-    }
-
+    result = {}
     payload = dict(request)
-    with open("data/payloads.json", "r") as f:
-        json_data: list = json.load(f)
 
     logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
     logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
 
-
-
-    note_ids = request.resourceIds
+    note_ids = payload["resourceIds"]
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
+        logger.info(f"{sms.__name__} -- RESPONSE DATA - {result}")
 
-    logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - result")
+    backup_data = {
+        "request": payload,
+        "response": result,
+        "created_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M UTC")
+    }
 
-    backup_payload["payload"] = payload
-    backup_payload["response"] = result
+    # temporary backing up data to json
+    logger.info(f"{sms.__name__} -- BACKING UP DATA")
+    try:
+        with open("database/backups.json", "r") as f:
+            backups = json.load(f)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        backups = []
 
-    json_data.append(backup_payload)
+    backups.append(backup_data)
 
-    with open("data/payloads.json", "w") as f:
-        json.dump(json_data, f, indent=4)
+    with open("database/backups.json", "w") as f:
+        json.dump(backups, f, indent=4)
+        logger.info(f"{sms.__name__} -- BACKED UP DATA")
 
-    return {"success": True, "data": result}
+    return {
+        "success": True if result.get("sms_sent") else False,
+        "data": result
+        }
 
 
 if __name__ == "__main__":
