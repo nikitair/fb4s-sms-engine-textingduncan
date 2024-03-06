@@ -1,7 +1,12 @@
+import os
+from dotenv import load_dotenv
 import phonenumbers
 from logs.logging_config import logger
 import requests
 # from schemas.fub_webhook_schemas import EventSchema
+
+
+load_dotenv()
 
 
 def format_phone_number(phone_number: str):
@@ -27,13 +32,13 @@ def backup_request_response(func):
     ...
 
 
-def notify_team_by_email(email_text: str):
+def notify_team_by_email(emails: str, email_text: str, subject: str):
     response = requests.post(
-        url="https://api.retool.com/v1/workflows/bb40dd15-f40f-4565-a671-ecbb0d06a575/startTrigger?workflowApiKey=retool_wk_26708f61a11642369c829a57dd42bbc5",
+        url=os.getenv("RETOOL_EMAIL_URL"),
         json={
-            "email": "nikita@actse.ltd",
+            "email": emails,
             "template": email_text,
-            "subject": "Texting Duncan Event"
+            "subject": subject
             }
     )
     if response.status_code == 200:

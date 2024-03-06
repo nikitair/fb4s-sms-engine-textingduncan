@@ -48,7 +48,7 @@ async def sms(request: EventSchema):
     note_ids = payload["resourceIds"]
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
-        logger.info(f"{sms.__name__} -- SMS RESPONSE DATA - {result}")
+        logger.info(f"{sms.__name__} -- RESPONSE DATA - {result}")
 
     backup_data = {
         "request": payload,
