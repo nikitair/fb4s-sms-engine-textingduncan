@@ -38,7 +38,6 @@ async def index():
 
 @app.post("/sms")
 async def sms(request: EventSchema):
-
     result = {}
     payload = dict(request)
 
