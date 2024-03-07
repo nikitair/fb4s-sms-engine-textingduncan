@@ -1,6 +1,26 @@
 from utils.fub_utils import FUB
 from utils.twilio_utils import Twilio
 from logs.logging_config import logger
+import json
+
+
+def get_signature(team_member_id: int):
+
+    team_member_signature = "Default Signature"
+
+    try:
+        with open("database/signatures.json", "r") as f:
+            all_signatures = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        all_signatures = []
+
+    for signature in all_signatures:
+        if signature.get("fub_id") == team_member_id:
+            team_member_signature = signature.get("signature")
+            break
+
+    return team_member_signature
+
 
 
 def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
@@ -15,7 +35,6 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
 
     fub = FUB()
     
-
     # get note data
     note_data = fub.get_note(note_id)
 
@@ -33,6 +52,11 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         if buyer_data["success"] is True and "[scheduled]" in note_message:
 
             buyer_name = buyer_data["data"]["name"]
+            assigned_team_member_id = buyer_data["data"]["assignedUserId"]
+
+            team_member_signature = get_signature(assigned_team_member_id)
+            note_message += team_member_signature
+
             result["contact_name"] = buyer_name
 
             buyer_phones = buyer_data["data"]["phones"]
