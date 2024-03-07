@@ -44,8 +44,6 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         buyer_id = note_data["data"]["personId"]
         note_message: str = note_data["data"]["body"]
 
-        result["sms_text"] = note_message
-
         # get buyer data
         buyer_data = fub.get_buyer(buyer_id)
 
@@ -75,5 +73,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 # send sms
                 sending_result = twilio.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result["success"]
+                
+        result["sms_text"] = note_message
 
     return result
