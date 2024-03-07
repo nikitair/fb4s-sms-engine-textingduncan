@@ -14,7 +14,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
     }
 
     fub = FUB()
-    twilio = Twilio()
+    
 
     # get note data
     note_data = fub.get_note(note_id)
@@ -43,6 +43,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
             logger.info(f"{send_note_to_buyer_by_sms_view.__name__} -- BUYER NAME - {buyer_name}; BUYER PHONE - {buyer_phone}")
 
             if buyer_phone:
+                twilio = Twilio()
                 result["contact_phone"] = buyer_phone
 
                 note_message = note_message.replace("[scheduled] ", "")
