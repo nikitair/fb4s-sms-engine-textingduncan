@@ -6,7 +6,7 @@ import json
 
 def get_signature(team_member_id: int):
 
-    team_member_signature = "Default Signature"
+    team_member_signature = "\n\nFB4S Team"
 
     try:
         with open("database/signatures.json", "r") as f:
@@ -73,7 +73,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 # send sms
                 sending_result = twilio.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result["success"]
-                
+
         result["sms_text"] = note_message
 
     return result
