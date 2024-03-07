@@ -30,7 +30,9 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         "sms_text": None,
         "contact_name": None,
         "contact_phone": None,
-        "sms_sent": False
+        "sms_sent": False,
+        "assigned_team_member_id": None,
+        "sms_signature": None
     }
 
     fub = FUB()
@@ -51,8 +53,11 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
 
             buyer_name = buyer_data["data"]["name"]
             assigned_team_member_id = buyer_data["data"]["assignedUserId"]
+            result["assigned_team_member_id"] = assigned_team_member_id
 
             team_member_signature = get_signature(assigned_team_member_id)
+            result["sms_signature"] = team_member_signature
+
             note_message += team_member_signature
 
             result["contact_name"] = buyer_name
