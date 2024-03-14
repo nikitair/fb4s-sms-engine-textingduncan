@@ -1,4 +1,6 @@
 import os
+import csv
+import json
 from dotenv import load_dotenv
 import phonenumbers
 from logs.logging_config import logger
@@ -43,3 +45,33 @@ def notify_team_by_email(emails: str, email_text: str, subject: str):
     )
     if response.status_code == 200:
         return True
+
+
+def convert_csv_to_json(csv_path: str, json_path: str):
+    """
+    loads data from csv file and stores it into JSON 
+    output -> list[dict]
+    file output -> .json
+    """
+    data = []
+    with open(csv_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+
+            row["sms_sent"] = None
+            row["sms_delivered"] = None
+            row["sms_body"] = None
+            row["sent_at"] = None
+
+            data.append(row)
+
+    with open(json_path, 'w') as jsonfile:
+        json.dump(data, jsonfile, indent=2)
+
+    logger.info(
+        f"{convert_csv_to_json.__name__} -- CONVERTED CSV [{csv_path}] TO JSON [{json_path}]")
+    return data
+
+
+if __name__ == "__main__":
+    convert_csv_to_json("data/blast/test_contacts.csv", "data/blast/test_contacts.json")
