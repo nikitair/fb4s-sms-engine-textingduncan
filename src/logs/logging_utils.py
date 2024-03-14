@@ -1,10 +1,11 @@
-import os
+# import os
 from dotenv import load_dotenv
 from .logging_config import logger
 from static import texts
-from utils.utils import notify_team_by_email
+# from utils.utils import notify_team_by_email
 
 load_dotenv()
+
 
 def log_server_start():
     logger.info("")

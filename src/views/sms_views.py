@@ -22,10 +22,7 @@ def get_signature(team_member_id: int):
     return team_member_signature
 
 
-
 def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
-    logger.info(f"{send_note_to_buyer_by_sms_view.__name__} -- SENDING NOTE AS SMS")
-
     result = {
         "sms_text": None,
         "contact_name": None,
@@ -36,7 +33,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
     }
 
     fub = FUB()
-    
+
     # get note data
     note_data = fub.get_note(note_id)
 
@@ -76,6 +73,7 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 note_message = note_message.replace("[scheduled] ", "")
 
                 # send sms
+                logger.info(f"{send_note_to_buyer_by_sms_view.__name__} -- SENDING NOTE AS SMS - {note_message}")
                 sending_result = twilio.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result["success"]
 

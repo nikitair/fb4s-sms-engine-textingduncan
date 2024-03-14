@@ -3,7 +3,7 @@ import json
 import uvicorn
 from datetime import datetime
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from schemas.fub_webhook_schemas import EventSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
@@ -36,18 +36,18 @@ async def index():
     return {"success": True, "message": "SMS Engine Index"}
 
 
-@app.post("/sms")
-async def sms(request: EventSchema):
+@app.post("/webhooks/note")
+async def send_note_to_sms(request: EventSchema):
     result = {}
     payload = dict(request)
 
-    logger.info(f"{sms.__name__} -- SMS ENDPOINT TRIGGERED")
-    logger.info(f"{sms.__name__} -- RECEIVED PAYLOAD - {payload}")
+    logger.info(f"{send_note_to_sms.__name__} -- NOTE to SMS WEBHOOK ENDPOINT TRIGGERED")
+    logger.info(f"{send_note_to_sms.__name__} -- RECEIVED PAYLOAD - {payload}")
 
     note_ids = payload["resourceIds"]
     if note_ids:
         result = send_note_to_buyer_by_sms_view(note_ids[0])
-        logger.info(f"{sms.__name__} -- RESPONSE DATA - {result}")
+        logger.info(f"{send_note_to_sms.__name__} -- NOTE PROCESSING RESPONSE DATA - {result}")
 
     backup_data = {
         "request": payload,
@@ -56,23 +56,28 @@ async def sms(request: EventSchema):
     }
 
     # temporary backing up data to json
-    logger.info(f"{sms.__name__} -- BACKING UP DATA")
+    logger.info(f"{send_note_to_sms.__name__} -- BACKING UP DATA")
     try:
-        with open("database/backups.json", "r") as f:
+        with open("data/backups.json", "r") as f:
             backups = json.load(f)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
         backups = []
 
     backups.append(backup_data)
 
-    with open("database/backups.json", "w") as f:
+    with open("data/backups.json", "w") as f:
         json.dump(backups, f, indent=4)
-        logger.info(f"{sms.__name__} -- BACKED UP DATA")
+        logger.info(f"{send_note_to_sms.__name__} -- BACKED UP DATA")
 
     return {
         "success": True if result.get("sms_sent") else False,
         "data": result
         }
+
+
+@app.post("sms/blast")
+def send_sms_blast(request: Request):
+    ...
 
 
 if __name__ == "__main__":
