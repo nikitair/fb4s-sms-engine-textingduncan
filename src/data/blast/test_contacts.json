@@ -12,10 +12,22 @@
     "sent_at": null
   },
   {
-    "MLS": "X7008990",
+    "MLS": "FS76556D",
     "Email": "50xtradingofficial@gmail.com",
     "Base_Email": "NTB4dHJhZGluZ29mZmljaWFsQGdtYWlsLmNvbQ==",
     "Phone": "+380968887415",
+    "Category": "Quick Service Restaurant",
+    "Province": "Ontario",
+    "sms_sent": null,
+    "sms_delivered": null,
+    "sms_body": null,
+    "sent_at": null
+  },
+  {
+    "MLS": "927355282",
+    "Email": "50xtradingofficial@gmail.com",
+    "Base_Email": "NTB4dHJhZGluZ29mZmljaWFsQGdtYWlsLmNvbQ==",
+    "Phone": "+380967024534",
     "Category": "Quick Service Restaurant",
     "Province": "Ontario",
     "sms_sent": null,
