@@ -36,7 +36,7 @@ async def index():
     return {"success": True, "message": "SMS Engine Index"}
 
 
-@app.post("/webhooks/note")
+@app.post("/sms")
 async def send_note_to_sms(request: EventSchema):
     result = {}
     payload = dict(request)

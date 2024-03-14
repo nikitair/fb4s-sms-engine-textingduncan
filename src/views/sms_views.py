@@ -79,6 +79,9 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
                 sending_result = twilio.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result["success"]
 
+                # updating note
+                fub.update_note(note_id=note_id, note_text=note_message)
+
         result["sms_text"] = note_message
 
     return result
