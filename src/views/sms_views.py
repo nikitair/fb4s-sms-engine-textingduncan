@@ -2,6 +2,7 @@ from utils.fub_utils import FUB
 from utils.twilio_utils import Twilio
 from logs.logging_config import logger
 import json
+from datetime import datetime
 
 
 def get_signature(team_member_id: int):
@@ -80,3 +81,35 @@ def send_note_to_buyer_by_sms_view(note_id: int) -> dict:
         result["sms_text"] = note_message
 
     return result
+
+
+def blast_send_sms(contacts_file_path: str, sms_body: str):
+    logger.info(f"{blast_send_sms.__name__} -- STARTING SMS BLAST")
+
+    twilio = Twilio()
+    contacts = []
+
+    with open(contacts_file_path, "r") as f:
+        contacts = json.load(f)
+
+    logger.info(f"{blast_send_sms.__name__} -- {len(contacts)} CONTACT RECEIVED\n")
+
+    if contacts:
+        for i, contact in enumerate(contacts, start=1):
+            logger.info(f"\n{blast_send_sms.__name__} -- # {i} - [{round(i/len(contacts)*100)} %]")
+            logger.info(f"{blast_send_sms.__name__} -- CONTACT DATA - {contact}")
+
+            phone_number = contact.get("Phone")
+
+            sending_result = twilio.send_sms(phone_number, sms_body)
+
+            if sending_result["success"] is True:
+
+                contact["sms_sent"] = True
+                contact["sms_body"] = sms_body
+                contact["sent_at"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M UTC")
+
+            with open(contacts_file_path, "w") as f:
+                json.dump(contacts)
+
+    logger.info(f"{blast_send_sms.__name__} -- SMS BLAST COMPLETED")
