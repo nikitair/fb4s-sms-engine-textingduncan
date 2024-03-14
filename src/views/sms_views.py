@@ -97,7 +97,7 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 
     if contacts:
         for i, contact in enumerate(contacts, start=1):
-            logger.info(f"{blast_send_sms.__name__} -- # {i} - [{round(i/len(contacts)*100)} %]")
+            logger.info(f"{blast_send_sms.__name__} -- # {i} - [{round(i/len(contacts)*100, 2)}%]")
             logger.info(f"{blast_send_sms.__name__} -- CONTACT DATA - {contact}")
 
             phone_number = contact.get("Phone")

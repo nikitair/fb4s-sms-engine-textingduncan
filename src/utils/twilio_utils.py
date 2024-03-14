@@ -29,7 +29,7 @@ class Twilio:
         try:
             sms = self.client.messages.create(
                 body=message,
-                from_="FB4S Team",
+                from_=os.getenv("TWILIO_FROM_NUMBER"),
                 to=phone_number
             )
             logger.info(f"{self.send_sms.__name__} -- TWILIO - SID - {sms.sid}; STATUS - {sms.status}")
