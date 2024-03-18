@@ -49,7 +49,7 @@ def notify_team_by_email(emails: str, email_text: str, subject: str):
 
 def convert_csv_to_json(csv_path: str, json_path: str):
     """
-    loads data from csv file and stores it into JSON 
+    loads data from csv file and stores it into JSON
     output -> list[dict]
     file output -> .json
     """

@@ -3,11 +3,11 @@ import json
 import uvicorn
 from datetime import datetime
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
-from schemas.fub_webhook_schemas import EventSchema
+from fastapi import FastAPI
+from schemas import EventSchema, SendSMSSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
-from views.sms_views import send_note_to_buyer_by_sms_view
+from services import sms_services
 # from utils.utils import backup_request_response
 
 
@@ -31,23 +31,23 @@ async def shutdown_event():
 
 
 @app.get("/")
-async def index():
-    logger.info(f"{index.__name__} -- INDEX ENDPOINT TRIGGERED")
+async def index_view():
+    logger.info(f"{index_view.__name__} -- INDEX ENDPOINT TRIGGERED")
     return {"success": True, "message": "SMS Engine Index"}
 
 
-@app.post("/sms")
-async def send_note_to_sms(request: EventSchema):
+@app.post("/sms/note-created")
+async def note_created_webhook_view(request: EventSchema):
     result = {}
     payload = dict(request)
 
-    logger.info(f"{send_note_to_sms.__name__} -- NOTE to SMS WEBHOOK ENDPOINT TRIGGERED")
-    logger.info(f"{send_note_to_sms.__name__} -- RECEIVED PAYLOAD - {payload}")
+    logger.info(f"{note_created_webhook_view.__name__} -- NOTE to SMS WEBHOOK ENDPOINT TRIGGERED")
+    logger.info(f"{note_created_webhook_view.__name__} -- RECEIVED PAYLOAD - {payload}")
 
     note_ids = payload["resourceIds"]
     if note_ids:
-        result = send_note_to_buyer_by_sms_view(note_ids[0])
-        logger.info(f"{send_note_to_sms.__name__} -- NOTE PROCESSING RESPONSE DATA - {result}")
+        result = sms_services.process_fub_note(note_ids[0])
+        logger.info(f"{note_created_webhook_view.__name__} -- NOTE PROCESSING RESPONSE DATA - {result}")
 
     backup_data = {
         "request": payload,
@@ -56,7 +56,7 @@ async def send_note_to_sms(request: EventSchema):
     }
 
     # temporary backing up data to json
-    logger.info(f"{send_note_to_sms.__name__} -- BACKING UP DATA")
+    logger.info(f"{note_created_webhook_view.__name__} -- BACKING UP DATA")
     try:
         with open("data/backups.json", "r") as f:
             backups = json.load(f)
@@ -67,7 +67,7 @@ async def send_note_to_sms(request: EventSchema):
 
     with open("data/backups.json", "w") as f:
         json.dump(backups, f, indent=4)
-        logger.info(f"{send_note_to_sms.__name__} -- BACKED UP DATA")
+        logger.info(f"{note_created_webhook_view.__name__} -- BACKED UP DATA")
 
     return {
         "success": True if result.get("sms_sent") else False,
@@ -75,9 +75,29 @@ async def send_note_to_sms(request: EventSchema):
         }
 
 
-@app.post("sms/blast")
-def send_sms_blast(request: Request):
-    ...
+@app.post("sms/send")
+def send_sms_view(request: SendSMSSchema):
+    logger.info(f"{send_sms_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
+
+    result = {
+        "success": False
+    }
+
+    payload = dict(request)
+
+    logger.info(f"{send_sms_view.__name__} -- PAYLOAD RECEIVED - {payload}")
+    to_number = payload.get("to_number")
+    sms_body = payload.get("sms_body")
+
+    is_sent = index_view.send_sms(to_number, sms_body)
+
+    if is_sent:
+        logger.info(f"{send_sms_view.__name__} -- SMS SUCCESSFULLY SENT TO - {to_number}")
+        result["success"] = True
+    else:
+        logger.warning(f"{send_sms_view.__name__} -- ! FAILED SENDING SMS TO - {to_number}")
+
+    return result
 
 
 if __name__ == "__main__":

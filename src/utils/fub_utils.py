@@ -64,7 +64,6 @@ class FUB:
             result["success"] = True
 
         return result
-    
 
     def update_note(self, note_id: int, note_text: str) -> dict:
         logger.info(f"{self.update_note.__name__} -- UPDATING NOTE - {note_id} - TO - {note_text}")
