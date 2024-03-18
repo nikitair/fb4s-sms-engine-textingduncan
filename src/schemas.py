@@ -7,3 +7,8 @@ class EventSchema(BaseModel):
     event: str
     resourceIds: list[int]
     uri: str
+
+
+class SendSMSSchema(BaseModel):
+    to_number: str
+    sms_body: str

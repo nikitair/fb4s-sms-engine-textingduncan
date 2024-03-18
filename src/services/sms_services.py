@@ -119,3 +119,9 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
             time.sleep(5)
 
     logger.info(f"{blast_send_sms.__name__} -- SMS BLAST COMPLETED")
+
+
+def send_sms(to_number: str, sms_body: str):
+    twilio = Twilio()
+    sms_sending_result = twilio.send_sms(to_number, sms_body)
+    return True if sms_sending_result.get("success") is True else False
