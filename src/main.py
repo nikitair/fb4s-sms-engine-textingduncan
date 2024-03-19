@@ -75,7 +75,7 @@ async def note_created_webhook_view(request: EventSchema):
         }
 
 
-@app.post("sms/send")
+@app.post("/sms/send")
 def send_sms_view(request: SendSMSSchema):
     logger.info(f"{send_sms_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
 
