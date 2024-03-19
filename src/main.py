@@ -89,7 +89,7 @@ def send_sms_view(request: SendSMSSchema):
     to_number = payload.get("to_number")
     sms_body = payload.get("sms_body")
 
-    is_sent = index_view.send_sms(to_number, sms_body)
+    is_sent = sms_services.send_sms(to_number, sms_body)
 
     if is_sent:
         logger.info(f"{send_sms_view.__name__} -- SMS SUCCESSFULLY SENT TO - {to_number}")
