@@ -21,3 +21,4 @@ class MailWizzSMSSchema(BaseModel):
     subscriber_email: str
     campaign_special_id: Union[int, str]
     phone_number: str
+    campaign_day: int

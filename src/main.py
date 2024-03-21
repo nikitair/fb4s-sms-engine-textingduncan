@@ -114,7 +114,14 @@ def mailwizz_webhook_view(request: MailWizzSMSSchema):
 
     campaign_special_id = payload["campaign_special_id"]
     to_phone_number = payload["phone_number"]
+    campaign_day = payload["campaign_day"]
 
+    processing_result = sms_services.process_mailwizz_data(campaign_special_id, to_phone_number, campaign_day)
+
+    if processing_result:
+        result["success"] = True
+
+    return result
 
 
 if __name__ == "__main__":

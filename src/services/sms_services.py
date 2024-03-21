@@ -1,5 +1,6 @@
 from utils.fub_utils import FUB
 from utils.twilio_utils import Twilio
+from utils.retool_utils import Retool
 from logs.logging_config import logger
 import json
 from datetime import datetime
@@ -125,3 +126,22 @@ def send_sms(to_number: str, sms_body: str):
     twilio = Twilio()
     sms_sending_result = twilio.send_sms(to_number, sms_body)
     return True if sms_sending_result.get("success") is True else False
+
+
+def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campaign_day: int):
+    logger.info(f"{process_mailwizz_data.__name__} -- PROCESSING MAILWIZZ WEBHOOK DATA")
+
+    # getting sms template if exists
+    retool = Retool()
+    retool_response = retool.get_sms_template(campaign_special_id, campaign_day)
+
+    if retool_response["success"] == True:
+
+        # sending sms
+        template = retool_response["sms_template"]
+        logger.info(f"{process_mailwizz_data.__name__} -- SMS TEMPLATE TO SEND - {template}; TO - {to_phone_number}")
+
+        return send_sms(to_phone_number, template)
+
+
+
