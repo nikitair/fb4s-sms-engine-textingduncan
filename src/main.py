@@ -4,7 +4,7 @@ import uvicorn
 from datetime import datetime
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from schemas import EventSchema, SendSMSSchema, MailWizzSMSSchema
+from schemas import request_schemas, response_schemas
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
 from services import sms_services
@@ -31,13 +31,13 @@ async def shutdown_event():
 
 
 @app.get("/")
-async def index_view():
+async def index_view() -> response_schemas.IndexResponseSchema:
     logger.info(f"{index_view.__name__} -- INDEX ENDPOINT TRIGGERED")
     return {"success": True, "message": "SMS Engine Index"}
 
 
 @app.post("/sms/note-created")
-async def note_created_webhook_view(request: EventSchema):
+async def note_created_webhook_view(request: request_schemas.FUBNoteCreatedSchema) -> response_schemas.FUBNoteCreatedResponseSchema:
     result = {}
     payload = dict(request)
 
@@ -76,7 +76,7 @@ async def note_created_webhook_view(request: EventSchema):
 
 
 @app.post("/sms/send")
-def send_sms_view(request: SendSMSSchema):
+def send_sms_view(request: request_schemas.SendSMSSchema) -> response_schemas.SimpleResponseSchema:
     logger.info(f"{send_sms_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
 
     result = {
@@ -102,7 +102,7 @@ def send_sms_view(request: SendSMSSchema):
 
 
 @app.post("/sms/mailwizz")
-def mailwizz_webhook_view(request: MailWizzSMSSchema):
+def mailwizz_webhook_view(request: request_schemas.MailWizzSMSSchema) -> response_schemas.SimpleResponseSchema:
     logger.info(f"{mailwizz_webhook_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
 
     result = {

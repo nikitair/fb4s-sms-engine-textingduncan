@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Union, Optional
 
 
-class EventSchema(BaseModel):
+class FUBNoteCreatedSchema(BaseModel):
     eventId: str
     eventCreated: str
     event: str
@@ -22,3 +22,4 @@ class MailWizzSMSSchema(BaseModel):
     campaign_special_id: Union[int, str]
     phone_number: str
     campaign_day: int
+
