@@ -31,7 +31,7 @@ async def shutdown_event():
 
 
 @app.get("/")
-async def index_view() -> response_schemas.IndexSchema:
+async def index_view() -> response_schemas.IndexResponseSchema:
     logger.info(f"{index_view.__name__} -- INDEX ENDPOINT TRIGGERED")
     return {"success": True, "message": "SMS Engine Index"}
 
