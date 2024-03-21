@@ -4,7 +4,7 @@ import uvicorn
 from datetime import datetime
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from schemas import EventSchema, SendSMSSchema
+from schemas import EventSchema, SendSMSSchema, MailWizzSMSSchema
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
 from services import sms_services
@@ -96,6 +96,30 @@ def send_sms_view(request: SendSMSSchema):
         result["success"] = True
     else:
         logger.warning(f"{send_sms_view.__name__} -- ! FAILED SENDING SMS TO - {to_number}")
+
+    return result
+
+
+
+@app.post("/sms/mailwizz")
+def mailwizz_webhook_view(request: MailWizzSMSSchema):
+    logger.info(f"{mailwizz_webhook_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
+
+    result = {
+        "success": False
+    }
+
+    payload = dict(request)
+    logger.info(f"{mailwizz_webhook_view.__name__} -- PAYLOAD RECEIVED - {payload}")
+
+    campaign_special_id = payload["campaign_special_id"]
+    to_phone_number = payload["phone_number"]
+    campaign_day = payload["campaign_day"]
+
+    processing_result = sms_services.process_mailwizz_data(campaign_special_id, to_phone_number, campaign_day)
+
+    if processing_result:
+        result["success"] = True
 
     return result
 
