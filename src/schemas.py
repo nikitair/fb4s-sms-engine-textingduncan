@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Union
+from typing import List, Union, Optional
 
 
 class EventSchema(BaseModel):
@@ -16,9 +16,9 @@ class SendSMSSchema(BaseModel):
 
 
 class MailWizzSMSSchema(BaseModel):
-    subscription_list_uid: List[str]
-    campaign_uid: str
-    subscriber_email: str
+    subscription_list_uid: Optional[List[str]]
+    campaign_uid: Optional[str]
+    subscriber_email: Optional[str]
     campaign_special_id: Union[int, str]
     phone_number: str
     campaign_day: int
