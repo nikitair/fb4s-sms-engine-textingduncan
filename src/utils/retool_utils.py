@@ -1,12 +1,15 @@
 import os
-from dotenv import load_dotenv
+
 import requests
+from dotenv import load_dotenv
+
 from logs.logging_config import logger
 
 load_dotenv()
 
+
 class Retool:
-    
+
     def __init__(self) -> None:
         logger.info("Retool -- CLASS INITIALIZED")
 
@@ -22,5 +25,4 @@ class Retool:
 
         if status_code != 200:
             logger.warning(f"{self.get_sms_template.__name__} -- ! SMS TEMPLATE NOT FOUND")
-        
         return data

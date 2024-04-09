@@ -1,7 +1,10 @@
 # import os
 from dotenv import load_dotenv
-from .logging_config import logger
+
 from static import texts
+
+from .logging_config import logger
+
 # from utils.utils import notify_team_by_email
 
 load_dotenv()

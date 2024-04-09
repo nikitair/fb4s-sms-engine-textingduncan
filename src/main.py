@@ -1,13 +1,16 @@
-import os
 import json
-import uvicorn
+import os
 from datetime import datetime
+
+import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from schemas import request_schemas, response_schemas
+
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
+from schemas import request_schemas, response_schemas
 from services import sms_services
+
 # from utils.utils import backup_request_response
 
 
@@ -98,7 +101,6 @@ def send_sms_view(request: request_schemas.SendSMSSchema) -> response_schemas.Si
         logger.warning(f"{send_sms_view.__name__} -- ! FAILED SENDING SMS TO - {to_number}")
 
     return result
-
 
 
 @app.post("/sms/mailwizz")

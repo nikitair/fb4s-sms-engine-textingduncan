@@ -1,10 +1,13 @@
-import os
 import csv
 import json
-from dotenv import load_dotenv
+import os
+
 import phonenumbers
-from logs.logging_config import logger
 import requests
+from dotenv import load_dotenv
+
+from logs.logging_config import logger
+
 # from schemas.fub_webhook_schemas import EventSchema
 
 

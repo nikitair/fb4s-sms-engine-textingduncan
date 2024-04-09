@@ -1,5 +1,6 @@
+from typing import List, Optional, Union
+
 from pydantic import BaseModel
-from typing import List, Union, Optional
 
 
 class FUBNoteCreatedSchema(BaseModel):
@@ -22,4 +23,3 @@ class MailWizzSMSSchema(BaseModel):
     campaign_special_id: Union[int, str]
     phone_number: str
     campaign_day: int
-

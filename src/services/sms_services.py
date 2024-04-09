@@ -1,10 +1,11 @@
-from utils.fub_utils import FUB
-from utils.twilio_utils import Twilio
-from utils.retool_utils import Retool
-from logs.logging_config import logger
 import json
-from datetime import datetime
 import time
+from datetime import datetime
+
+from logs.logging_config import logger
+from utils.fub_utils import FUB
+from utils.retool_utils import Retool
+from utils.twilio_utils import Twilio
 
 
 def get_signature(team_member_id: int):
@@ -135,13 +136,10 @@ def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campai
     retool = Retool()
     retool_response = retool.get_sms_template(campaign_special_id, campaign_day)
 
-    if retool_response["success"] == True:
+    if retool_response["success"] is True:
 
         # sending sms
         template = retool_response["sms_template"]
         logger.info(f"{process_mailwizz_data.__name__} -- SMS TEMPLATE TO SEND - {template}; TO - {to_phone_number}")
 
         return send_sms(to_phone_number, template)
-
-
-
