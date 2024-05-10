@@ -131,7 +131,7 @@ def mailwizz_webhook_view(request: request_schemas.MailWizzSMSSchema) -> respons
         jerk_realtor_name,
         tm_name,
         mls
-        )
+    )
 
     if processing_result:
         result["success"] = True
