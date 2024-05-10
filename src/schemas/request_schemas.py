@@ -23,6 +23,6 @@ class MailWizzSMSSchema(BaseModel):
     campaign_special_id: Union[int, str]
     phone_number: str
     campaign_day: int
-    jerk_realtor_name: Optional[str]
-    tm_name: Optional[str]
-    mls: Optional[str]
+    # jerk_realtor_name: Optional[str]
+    # tm_name: Optional[str]
+    # mls: Optional[str]
