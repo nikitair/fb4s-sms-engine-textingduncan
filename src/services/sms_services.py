@@ -129,7 +129,7 @@ def send_sms(to_number: str, sms_body: str):
     return True if sms_sending_result.get("success") is True else False
 
 
-def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campaign_day: int):
+def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campaign_day: int, jerk_realtor_name: str = None, tm_name: str = None, mls: str = None):
     logger.info(f"{process_mailwizz_data.__name__} -- PROCESSING MAILWIZZ WEBHOOK DATA")
 
     # getting sms template if exists
@@ -139,7 +139,22 @@ def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campai
     if retool_response["success"] is True:
 
         # sending sms
-        template = retool_response["sms_template"]
-        logger.info(f"{process_mailwizz_data.__name__} -- SMS TEMPLATE TO SEND - {template}; TO - {to_phone_number}")
+        template: str = retool_response["sms_template"]
 
+        # Jerk Realtors Logic:
+        if campaign_special_id == 9:
+            logger.info(f"{process_mailwizz_data.__name__} -- JERK REALTORS LOGIC")
+
+            match campaign_day:
+                case 1:
+                    template.replace('zzzzz', tm_name)
+                    template.replace('xxxxx', mls)
+
+                case 2:
+                    template.replace('yyyyy', jerk_realtor_name)
+
+                case _:
+                    pass
+        
+        logger.info(f"{process_mailwizz_data.__name__} -- SMS TEMPLATE TO SEND - {template}; TO - {to_phone_number}")
         return send_sms(to_phone_number, template)
