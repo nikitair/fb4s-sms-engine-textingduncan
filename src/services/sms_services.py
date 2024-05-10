@@ -147,11 +147,11 @@ def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campai
 
             match campaign_day:
                 case 1:
-                    template.replace('zzzzz', tm_name)
-                    template.replace('xxxxx', mls)
+                    template = template.replace('zzzzz', tm_name)
+                    template = template.replace('xxxxx', mls)
 
                 case 2:
-                    template.replace('yyyyy', jerk_realtor_name)
+                    template = template.replace('yyyyy', jerk_realtor_name)
 
                 case _:
                     pass
