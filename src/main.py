@@ -119,9 +119,9 @@ def mailwizz_webhook_view(request: request_schemas.MailWizzSMSSchema) -> respons
     campaign_day = payload["campaign_day"]
 
     # Jerk Realtors Logic
-    jerk_realtor_name = payload.get("jerk_realtor_name")
-    tm_name = payload.get("tm_name")
-    mls = payload.get("mls")
+    jerk_realtor_name = payload.get("jerk_realtor_name", "Realtor")
+    tm_name = payload.get("tm_name", "Willow Graznow")
+    mls = payload.get("mls", "N/A")
 
 
     processing_result = sms_services.process_mailwizz_data(

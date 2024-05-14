@@ -145,6 +145,10 @@ def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campai
         if campaign_special_id == 9:
             logger.info(f"{process_mailwizz_data.__name__} -- JERK REALTORS LOGIC")
 
+            logger.info(f"{process_mailwizz_data.__name__} -- TM NAME - {tm_name}")
+            logger.info(f"{process_mailwizz_data.__name__} -- MLS - {mls}")
+            logger.info(f"{process_mailwizz_data.__name__} -- JR NAME - {jerk_realtor_name}")
+
             match campaign_day:
                 case 1:
                     template = template.replace('zzzzz', tm_name)
