@@ -4,7 +4,7 @@ from datetime import datetime
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from logs.logging_config import logger
 from logs.logging_utils import log_server_start, log_server_stop
@@ -104,7 +104,7 @@ def send_sms_view(request: request_schemas.SendSMSSchema) -> response_schemas.Si
 
 
 @app.post("/sms/mailwizz")
-def mailwizz_webhook_view(request: request_schemas.MailWizzSMSSchema) -> response_schemas.SimpleResponseSchema:
+def mailwizz_webhook_view(request: Request) -> response_schemas.SimpleResponseSchema:
     logger.info(f"{mailwizz_webhook_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
 
     result = {

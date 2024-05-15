@@ -16,13 +16,13 @@ class SendSMSSchema(BaseModel):
     sms_body: str
 
 
-class MailWizzSMSSchema(BaseModel):
+# class MailWizzSMSSchema(BaseModel):
     # subscription_list_uid: Optional[List[str]]
     # campaign_uid: Optional[str]
     # subscriber_email: Optional[str]
-    campaign_special_id: Union[int, str]
-    phone_number: str
-    campaign_day: int
+    # campaign_special_id: Union[int, str]
+    # phone_number: str
+    # campaign_day: int
     # jerk_realtor_name: Optional[str]
     # tm_name: Optional[str]
     # mls: Optional[str]
