@@ -104,14 +104,14 @@ def send_sms_view(request: request_schemas.SendSMSSchema) -> response_schemas.Si
 
 
 @app.post("/sms/mailwizz")
-def mailwizz_webhook_view(request: Request) -> response_schemas.SimpleResponseSchema:
+async def mailwizz_webhook_view(request: Request) -> response_schemas.SimpleResponseSchema:
     logger.info(f"{mailwizz_webhook_view.__name__} -- SEND SMS WEBHOOK ENDPOINT TRIGGERED")
 
     result = {
         "success": False
     }
 
-    payload = request.json() 
+    payload = await request.json() 
     logger.info(f"{mailwizz_webhook_view.__name__} -- PAYLOAD RECEIVED - {payload}")
 
     campaign_special_id = payload["campaign_special_id"]
