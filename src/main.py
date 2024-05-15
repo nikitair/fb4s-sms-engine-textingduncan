@@ -111,7 +111,7 @@ def mailwizz_webhook_view(request: Request) -> response_schemas.SimpleResponseSc
         "success": False
     }
 
-    payload = dict(request)
+    payload = request.json() 
     logger.info(f"{mailwizz_webhook_view.__name__} -- PAYLOAD RECEIVED - {payload}")
 
     campaign_special_id = payload["campaign_special_id"]
