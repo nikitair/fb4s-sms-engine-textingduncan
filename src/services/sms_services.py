@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import json
 import time
 from datetime import datetime
@@ -5,7 +7,15 @@ from datetime import datetime
 from logs.logging_config import logger
 from utils.fub_utils import FUB
 from utils.retool_utils import Retool
-from utils.twilio_utils import Twilio
+# from utils.twilio_utils import Twilio
+from utils.telnyx_utils import TelnyxService
+
+load_dotenv()
+
+TELNYX_API_KEY = os.getenv("TELNYX_API_KEY")
+TELNYX_PUBLIC_KEY = os.getenv("TELNYX_PUBLIC_KEY")
+TELNYX_PROFILE_ID = os.getenv("TELNYX_PROFILE_ID")
+TELNYX_FROM_NUMBER = os.getenv("TELNYX_FROM_NUMBER")
 
 
 def get_signature(team_member_id: int):
@@ -71,14 +81,18 @@ def process_fub_note(note_id: int) -> dict:
             logger.info(f"{process_fub_note.__name__} -- BUYER NAME - {buyer_name}; BUYER PHONE - {buyer_phone}")
 
             if buyer_phone:
-                twilio = Twilio()
+                telnyx = TelnyxService(
+                    api_key=TELNYX_API_KEY, 
+                    profile_id=TELNYX_PROFILE_ID,
+                    from_phone_numbers=TELNYX_FROM_NUMBER
+                )
                 result["contact_phone"] = buyer_phone
 
                 note_message = note_message.replace("[scheduled] ", "")
 
                 # send sms
                 logger.info(f"{process_fub_note.__name__} -- SENDING NOTE AS SMS - {note_message}")
-                sending_result = twilio.send_sms(buyer_phone, note_message)
+                sending_result = telnyx.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result["success"]
 
                 # updating note
@@ -92,7 +106,11 @@ def process_fub_note(note_id: int) -> dict:
 def blast_send_sms(contacts_file_path: str, sms_body: str):
     logger.info(f"{blast_send_sms.__name__} -- STARTING SMS BLAST")
 
-    twilio = Twilio()
+    telnyx = TelnyxService(
+        api_key=TELNYX_API_KEY, 
+        profile_id=TELNYX_PROFILE_ID,
+        from_phone_numbers=TELNYX_FROM_NUMBER
+    )
     contacts = []
 
     with open(contacts_file_path, "r") as f:
@@ -107,7 +125,7 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 
             phone_number = contact.get("Phone")
 
-            sending_result = twilio.send_sms(phone_number, sms_body)
+            sending_result = telnyx.send_sms(phone_number, sms_body)
 
             if sending_result["success"] is True:
 
@@ -124,8 +142,12 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 
 
 def send_sms(to_number: str, sms_body: str):
-    twilio = Twilio()
-    sms_sending_result = twilio.send_sms(to_number, sms_body)
+    telnyx = TelnyxService(
+        api_key=TELNYX_API_KEY, 
+        profile_id=TELNYX_PROFILE_ID,
+        from_phone_numbers=TELNYX_FROM_NUMBER
+    )
+    sms_sending_result = telnyx.send_sms(to_number, sms_body)
     return True if sms_sending_result.get("success") is True else False
 
 
