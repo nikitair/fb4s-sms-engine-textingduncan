@@ -12,9 +12,10 @@ from utils.telnyx_utils import TelnyxService
 
 load_dotenv()
 
-TELNYX_API_KEY = os.getenv("TELNYX_API_KEY")
-TELNYX_PUBLIC_KEY = os.getenv("TELNYX_PUBLIC_KEY")
-TELNYX_PROFILE_ID = os.getenv("TELNYX_PROFILE_ID")
+TELNYX_API_KEY = os.getenv("TELNYX_API_KEY", "")
+TELNYX_PUBLIC_KEY = os.getenv("TELNYX_PUBLIC_KEY", "")
+TELNYX_PROFILE_ID = os.getenv("TELNYX_PROFILE_ID", "")
+TELNYX_PHONE_NUMBER = os.getenv("TELNYX_PHONE_NUMBER", "")
 
 
 def get_signature(team_member_id: int):
