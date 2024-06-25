@@ -12,7 +12,7 @@ class TelnyxService:
 
 
     def send_sms(self, to_phone_number: str, sms_body: str) -> bool | None:        
-        logger.info(f"Telnyx: send SMS - (to: {to_phone_number}; body: {sms_body})")
+        logger.info(f"Telnyx: send SMS - (to: {to_phone_number}; body: {sms_body}; Caller ID: {self.from_caller_id})")
         
         response = requests.post(
             url=self.url,
