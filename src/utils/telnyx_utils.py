@@ -19,7 +19,7 @@ class TelnyxService:
         from_phone_number = self.from_phone_numbers[0]
         self.from_phone_numbers.append(self.from_phone_numbers.pop(0))
         
-        logger.info(f"Telnyx: send SMS - (from: {to_phone_number}; to: {to_phone_number}; body: {sms_body})")
+        logger.info(f"Telnyx: send SMS - (from: {from_phone_number}; to: {to_phone_number}; body: {sms_body})")
         
         response = requests.post(
             url=self.url,
