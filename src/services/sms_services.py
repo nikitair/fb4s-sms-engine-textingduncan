@@ -15,9 +15,6 @@ load_dotenv()
 TELNYX_API_KEY = os.getenv("TELNYX_API_KEY")
 TELNYX_PUBLIC_KEY = os.getenv("TELNYX_PUBLIC_KEY")
 TELNYX_PROFILE_ID = os.getenv("TELNYX_PROFILE_ID")
-TELNYX_FROM_NUMBER = os.getenv("TELNYX_FROM_NUMBER", [])
-if TELNYX_FROM_NUMBER:
-    TELNYX_FROM_NUMBER = TELNYX_FROM_NUMBER.split(",")
 
 
 def get_signature(team_member_id: int):
@@ -85,8 +82,7 @@ def process_fub_note(note_id: int) -> dict:
             if buyer_phone:
                 telnyx = TelnyxService(
                     api_key=TELNYX_API_KEY, 
-                    profile_id=TELNYX_PROFILE_ID,
-                    from_phone_numbers=TELNYX_FROM_NUMBER
+                    profile_id=TELNYX_PROFILE_ID
                 )
                 result["contact_phone"] = buyer_phone
 
@@ -110,8 +106,7 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 
     telnyx = TelnyxService(
         api_key=TELNYX_API_KEY, 
-        profile_id=TELNYX_PROFILE_ID,
-        from_phone_numbers=TELNYX_FROM_NUMBER
+        profile_id=TELNYX_PROFILE_ID
     )
     contacts = []
 
@@ -146,8 +141,7 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 def send_sms(to_number: str, sms_body: str):
     telnyx = TelnyxService(
         api_key=TELNYX_API_KEY, 
-        profile_id=TELNYX_PROFILE_ID,
-        from_phone_numbers=TELNYX_FROM_NUMBER
+        profile_id=TELNYX_PROFILE_ID
     )
     sms_sending_result = telnyx.send_sms(to_number, sms_body)
     return True if sms_sending_result else False
