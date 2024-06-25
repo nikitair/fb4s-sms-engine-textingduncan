@@ -61,6 +61,7 @@ def process_fub_note(note_id: int) -> dict:
         buyer_data = fub.get_buyer(buyer_id)
 
         if buyer_data["success"] is True and "[scheduled]" in note_message:
+            logger.info(f"*** SENDING NOTE AS SMS")
 
             buyer_name = buyer_data["data"]["name"]
             assigned_team_member_id = buyer_data["data"]["assignedUserId"]
@@ -91,7 +92,7 @@ def process_fub_note(note_id: int) -> dict:
                 note_message = note_message.replace("[scheduled] ", "")
 
                 # send sms
-                logger.info(f"{process_fub_note.__name__} -- SENDING NOTE AS SMS - {note_message}")
+                # logger.info(f"{process_fub_note.__name__} -- SENDING NOTE AS SMS - {note_message}")
                 sending_result = telnyx.send_sms(buyer_phone, note_message)
                 result["sms_sent"] = sending_result
 
