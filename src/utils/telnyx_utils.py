@@ -26,7 +26,7 @@ class TelnyxService:
                 "from": self.from_caller_id,
                 "to": to_phone_number,
                 "messaging_profile_id": self.profile_id,
-                "webhook_url": "https://textingduncan.onrender.com/telnyx-webhook"
+                "webhook_url": "https://hook.us1.make.com/08g2zxt99khp9706o2plha4rihjtqrw6"
             }
         )
         
