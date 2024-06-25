@@ -139,5 +139,12 @@ async def mailwizz_webhook_view(request: Request) -> response_schemas.SimpleResp
     return result
 
 
+@app.post("/telnyx-webhook")
+async def telnyx_webhook(request: Request):
+    payload = await request.json()
+    logger.info(f"Telnyx Webhook Payload - ({payload})")
+    return {"message": "Under Development"}
+
+
 if __name__ == "__main__":
     uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
