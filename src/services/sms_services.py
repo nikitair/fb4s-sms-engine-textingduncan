@@ -83,7 +83,8 @@ def process_fub_note(note_id: int) -> dict:
             if buyer_phone:
                 telnyx = TelnyxService(
                     api_key=TELNYX_API_KEY, 
-                    profile_id=TELNYX_PROFILE_ID
+                    profile_id=TELNYX_PROFILE_ID,
+                    from_phone_number=TELNYX_PHONE_NUMBER
                 )
                 result["contact_phone"] = buyer_phone
 
@@ -107,7 +108,8 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 
     telnyx = TelnyxService(
         api_key=TELNYX_API_KEY, 
-        profile_id=TELNYX_PROFILE_ID
+        profile_id=TELNYX_PROFILE_ID,
+        from_phone_number=TELNYX_PHONE_NUMBER
     )
     contacts = []
 
@@ -142,7 +144,8 @@ def blast_send_sms(contacts_file_path: str, sms_body: str):
 def send_sms(to_number: str, sms_body: str):
     telnyx = TelnyxService(
         api_key=TELNYX_API_KEY, 
-        profile_id=TELNYX_PROFILE_ID
+        profile_id=TELNYX_PROFILE_ID,
+        from_phone_number=TELNYX_PHONE_NUMBER
     )
     sms_sending_result = telnyx.send_sms(to_number, sms_body)
     return True if sms_sending_result else False
