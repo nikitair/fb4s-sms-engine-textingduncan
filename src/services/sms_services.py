@@ -185,3 +185,13 @@ def process_mailwizz_data(campaign_special_id: int, to_phone_number: str, campai
         
         logger.info(f"{process_mailwizz_data.__name__} -- SMS TEMPLATE TO SEND - {template}; TO - {to_phone_number}")
         return send_sms(to_phone_number, template)
+
+
+def get_telnyx_stats():
+    logger.info("Get Telnyx stats")
+    telnyx = TelnyxService(
+        api_key=TELNYX_API_KEY, 
+        profile_id=TELNYX_PROFILE_ID,
+        from_phone_number=TELNYX_PHONE_NUMBER
+    )
+    return telnyx.get_messaging_stats()

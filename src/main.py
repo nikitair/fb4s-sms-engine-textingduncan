@@ -146,5 +146,11 @@ async def telnyx_webhook(request: Request):
     return {"message": "Under Development"}
 
 
+@app.get("/telnyx-stats")
+async def telnyx_stats():
+    logger.info("*** API: Get Telnyx stats")
+    return sms_services.get_telnyx_stats()
+
+
 if __name__ == "__main__":
     uvicorn.run(app=app, port=int(SERVER_PORT), host=SERVER_HOST)
