@@ -12,9 +12,9 @@ class TelnyxService:
     from_caller_id: str = "FB4S Team"
     url: str = "https://api.telnyx.com/v2/messages"
 
-    def get_messaging_stats(self) -> list:
+    def get_messaging_stats(self) -> dict | None:
         logger.info("Telnyx: Get sent messages")
-        messages = []
+        data = None
 
         response = requests.get(
             url=f"https://api.telnyx.com/v2/messaging_profile_metrics?page[number]=1&page[size]=250&id={self.profile_id}&time_frame=30d",
@@ -28,11 +28,11 @@ class TelnyxService:
         logger.info(f"Telnyx: status code - ({status_code})")
         if status_code == 200:
             logger.debug(f"Telnyx: raw response data - ({response.json()})")
-            messages = response.json()["data"]
+            data = response.json()["data"][0]
         else:
             logger.error(f"Telnyx: !!! Error - ({response.text})")
             
-        return messages
+        return data
         
 
     def send_sms(self, to_phone_number: str, sms_body: str) -> bool | None:

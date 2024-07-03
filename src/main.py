@@ -147,7 +147,7 @@ async def telnyx_webhook(request: Request):
 
 
 @app.get("/telnyx-stats")
-async def telnyx_stats() -> list:
+async def telnyx_stats() -> dict:
     logger.info("*** API: Get Telnyx stats")
     return sms_services.get_telnyx_stats()
 
