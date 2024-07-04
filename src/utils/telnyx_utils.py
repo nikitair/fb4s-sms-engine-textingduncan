@@ -2,6 +2,7 @@ from logs.logging_config import logger
 import requests
 from dataclasses import dataclass
 from utils import utils
+from utils.retool_utils import Retool
 
 
 @dataclass
@@ -12,28 +13,6 @@ class TelnyxService:
     from_caller_id: str = "FB4S Team"
     url: str = "https://api.telnyx.com/v2/messages"
 
-    def get_messaging_stats(self) -> dict | None:
-        logger.info("Telnyx: Get sent messages")
-        data = None
-
-        response = requests.get(
-            url=f"https://api.telnyx.com/v2/messaging_profile_metrics?page[number]=1&page[size]=250&id={self.profile_id}&time_frame=30d",
-            headers={
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
-            }
-        )
-        
-        status_code = response.status_code
-        logger.info(f"Telnyx: status code - ({status_code})")
-        if status_code == 200:
-            logger.debug(f"Telnyx: raw response data - ({response.json()})")
-            data = response.json()["data"][0]
-        else:
-            logger.error(f"Telnyx: !!! Error - ({response.text})")
-            
-        return data
-        
 
     def send_sms(self, to_phone_number: str, sms_body: str) -> bool | None:
         to_phone_number = utils.format_phone_number(to_phone_number)
@@ -59,6 +38,13 @@ class TelnyxService:
         logger.info(f"Telnyx: Status Code - ({status_code})")
 
         if status_code == 200:
+            response_data = response.json()
+            logger.debug(f"Telnyx: response data - ({response_data})")
+        
+            # collect statistics
+            stats_collected = self.collect_stats(response_data)
+            logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+            
             return True
         else:
             logger.error(f"!!! Telnyx: Error - ({response.text})")
@@ -83,7 +69,40 @@ class TelnyxService:
             logger.info(f"Telnyx 2 Try: Status Code - ({status_code})")
 
             if status_code == 200:
+                response_data = response_try.json()
+                logger.debug(f"Telnyx: response data - ({response_data})")
+            
+                # collect statistics
+                stats_collected = self.collect_stats(response_data)
+                logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+                
                 return True
             else:
                 logger.error(f"!!! Telnyx 2 Try: Error - ({response.text})")
                 return False
+            
+            
+    def collect_stats(self, telnyx_response_payload: dict) -> bool:
+        logger.info(f"Telnyx: collect stats for payload - ({telnyx_response_payload})")
+        db_insert_payload = {
+                "sender": telnyx_response_payload["data"]["from"]["phone_number"],
+                "receiver": telnyx_response_payload["data"]["to"][0]["phone_number"],
+                "sms_body": telnyx_response_payload["data"]["text"],
+                "direction": telnyx_response_payload["data"]["direction"],
+                "messaging_type": telnyx_response_payload["data"]["record_type"],
+                "delivery_status": telnyx_response_payload["data"]["to"][0]["status"],
+                "message_id": telnyx_response_payload["data"]["id"],
+                "messaging_profile_id": telnyx_response_payload["data"]["messaging_profile_id"],
+                "cost_amount": telnyx_response_payload["data"]["cost"]["amount"],
+                "currency": telnyx_response_payload["data"]["cost"]["currency"]
+        }
+        logger.info(f"Telnyx: DB statistics Insert payload - ({db_insert_payload})")
+        
+        retool = Retool()
+        save_stats_result = retool.send_telnyx_stats(db_insert_payload)
+        logger.info(f"Retool: DB saving result - ({save_stats_result})")
+        return save_stats_result
+
+        
+        
+        

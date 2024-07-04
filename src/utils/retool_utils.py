@@ -26,3 +26,18 @@ class Retool:
         if status_code != 200:
             logger.warning(f"{self.get_sms_template.__name__} -- ! SMS TEMPLATE NOT FOUND")
         return data
+    
+    
+    def send_telnyx_stats(self, insert_payload: dict) -> bool:
+        logger.info(f"Retool: save Telnyx stats to DB - ({insert_payload})")
+        
+        response = requests.post(
+            url=os.getenv("RETOOL_SAVE_TELNYX_STATS_URL"),
+            headers={
+                "X-Workflow-Api-Key": os.getenv("RETOOL_SAVE_TELNYX_STATS_API_KEY")
+            },
+            json=insert_payload
+        )
+        status_code = response.status_code
+        logger.info(f"Retool: status code - ({status_code})")
+        return True if status_code == 200 else False
