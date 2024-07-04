@@ -19,7 +19,7 @@ def format_phone_number(phone_number: str):
     converts phone numbers to a desired format
     (012) 345-6789 -> +10123456789, etc.
     """
-    phone_number_formatted = ""
+    phone_number_formatted = phone_number
     try:
         phone_number_formatted = phonenumbers.format_number(
             phonenumbers.parse(phone_number, 'CA'),
