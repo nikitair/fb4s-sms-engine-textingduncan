@@ -85,6 +85,26 @@ class TelnyxService:
                 return True
             else:
                 logger.error(f"!!! Telnyx 2 Try: Error - ({response_try.text})")
+                
+                db_insert_payload = {
+                    "sender": self.from_phone_number,
+                    "receiver": "to_phone_number",
+                    "sms_body": sms_body,
+                    "direction": "outbound",
+                    "messaging_type": "message",
+                    "delivery_status": "failed",
+                    "message_id": None,
+                    "messaging_profile_id": self.profile_id,
+                    "cost_amount": 0,
+                    "currency": None
+                }
+                try:
+                    # collect statistics
+                    stats_collected = self.collect_stats(db_insert_payload)
+                    logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+                except Exception as ex:
+                    logger.exception(f"Telnyx: !!! Failed collecting stats - ({ex})")
+                
                 return False
             
             
