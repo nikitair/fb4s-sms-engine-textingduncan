@@ -100,8 +100,9 @@ class TelnyxService:
                 }
                 try:
                     # collect statistics
-                    stats_collected = self.collect_stats(db_insert_payload)
-                    logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+                    retool = Retool()
+                    save_stats_result = retool.send_telnyx_stats(db_insert_payload)
+                    logger.info(f"Retool: DB saving result - ({save_stats_result})")
                 except Exception as ex:
                     logger.exception(f"Telnyx: !!! Failed collecting stats - ({ex})")
                 
