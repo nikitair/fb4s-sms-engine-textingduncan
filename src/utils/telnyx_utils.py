@@ -84,7 +84,14 @@ class TelnyxService:
                 
                 return True
             else:
-                logger.error(f"!!! Telnyx 2 Try: Error - ({response.text})")
+                logger.error(f"!!! Telnyx 2 Try: Error - ({response_try.text})")
+                error_response_payload = response_try.json()
+                try:
+                    # collect statistics
+                    stats_collected = self.collect_stats(error_response_payload)
+                    logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+                except Exception as ex:
+                    logger.exception(f"Telnyx: !!! Failed collecting stats - ({ex})")
                 return False
             
             
