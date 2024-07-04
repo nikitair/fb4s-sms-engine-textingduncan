@@ -88,7 +88,7 @@ class TelnyxService:
                 
                 db_insert_payload = {
                     "sender": self.from_phone_number,
-                    "receiver": "to_phone_number",
+                    "receiver": to_phone_number,
                     "sms_body": sms_body,
                     "direction": "outbound",
                     "messaging_type": "message",
