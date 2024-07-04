@@ -41,9 +41,12 @@ class TelnyxService:
             response_data = response.json()
             logger.debug(f"Telnyx: response data - ({response_data})")
         
-            # collect statistics
-            stats_collected = self.collect_stats(response_data)
-            logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+            try:
+                # collect statistics
+                stats_collected = self.collect_stats(response_data)
+                logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+            except Exception as ex:
+                logger.exception(f"Telnyx: !!! Failed collecting stats - ({ex})")
             
             return True
         else:
@@ -71,10 +74,13 @@ class TelnyxService:
             if status_code == 200:
                 response_data = response_try.json()
                 logger.debug(f"Telnyx: response data - ({response_data})")
-            
-                # collect statistics
-                stats_collected = self.collect_stats(response_data)
-                logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+
+                try:
+                    # collect statistics
+                    stats_collected = self.collect_stats(response_data)
+                    logger.info(f"Telnyx: Stats collected - ({stats_collected})")
+                except Exception as ex:
+                    logger.exception(f"Telnyx: !!! Failed collecting stats - ({ex})")
                 
                 return True
             else:
