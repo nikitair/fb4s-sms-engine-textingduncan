@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from twilio.rest import Client
 
-from logs.logging_config import logger
+from logging_config import logger
 
 from .utils import format_phone_number
 

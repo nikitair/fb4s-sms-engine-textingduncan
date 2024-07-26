@@ -6,8 +6,8 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 
-from logs.logging_config import logger
-from logs.logging_utils import log_server_start, log_server_stop
+from logging_config import logger
+from logging_utils import log_server_start, log_server_stop
 from schemas import request_schemas, response_schemas
 from services import sms_services
 
@@ -52,25 +52,25 @@ async def note_created_webhook_view(request: request_schemas.FUBNoteCreatedSchem
         result = sms_services.process_fub_note(note_ids[0])
         logger.info(f"{note_created_webhook_view.__name__} -- NOTE PROCESSING RESPONSE DATA - {result}")
 
-    backup_data = {
-        "request": payload,
-        "response": result,
-        "created_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M UTC")
-    }
+    # backup_data = {
+    #     "request": payload,
+    #     "response": result,
+    #     "created_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M UTC")
+    # }
 
-    # temporary backing up data to json
-    logger.info(f"{note_created_webhook_view.__name__} -- BACKING UP DATA")
-    try:
-        with open("data/backups.json", "r") as f:
-            backups = json.load(f)
-    except (FileNotFoundError, json.decoder.JSONDecodeError):
-        backups = []
+    # # temporary backing up data to json
+    # logger.info(f"{note_created_webhook_view.__name__} -- BACKING UP DATA")
+    # try:
+    #     with open("data/backups.json", "r") as f:
+    #         backups = json.load(f)
+    # except (FileNotFoundError, json.decoder.JSONDecodeError):
+    #     backups = []
 
-    backups.append(backup_data)
+    # backups.append(backup_data)
 
-    with open("data/backups.json", "w") as f:
-        json.dump(backups, f, indent=4)
-        logger.info(f"{note_created_webhook_view.__name__} -- BACKED UP DATA")
+    # with open("data/backups.json", "w") as f:
+    #     json.dump(backups, f, indent=4)
+    #     logger.info(f"{note_created_webhook_view.__name__} -- BACKED UP DATA")
 
     return {
         "success": True if result.get("sms_sent") else False,

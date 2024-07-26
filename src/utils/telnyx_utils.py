@@ -1,4 +1,4 @@
-from logs.logging_config import logger
+from logging_config import logger
 import requests
 from dataclasses import dataclass
 from utils import utils

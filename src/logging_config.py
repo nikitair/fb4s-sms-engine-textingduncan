@@ -10,7 +10,7 @@ class CustomLogger():
         log_filename = datetime.now().strftime("logs_%Y-%m-%dT%H:%M.log")
 
         logger.add(
-            sink=f"{ROOT_DIR}/src/logs/{log_filename}",
+            sink=f"{ROOT_DIR}/logs/{log_filename}",
             format="""<green>{time:YYYY-MM-DD HH:mm:ss}</green> UTC - <level>{level}</level> - {message} || <level>{module}</level>""",
             level="DEBUG",
             rotation="50 MB",

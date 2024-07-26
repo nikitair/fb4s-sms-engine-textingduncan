@@ -4,7 +4,7 @@ import json
 import time
 from datetime import datetime
 
-from logs.logging_config import logger
+from logging_config import logger
 from utils.fub_utils import FUB
 from utils.retool_utils import Retool
 # from utils.twilio_utils import Twilio
