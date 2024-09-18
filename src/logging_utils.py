@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from static import texts
 
-from .logging_config import logger
+from logging_config import logger
 
 # from utils.utils import notify_team_by_email
 
