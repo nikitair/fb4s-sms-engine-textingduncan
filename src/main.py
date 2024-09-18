@@ -20,7 +20,11 @@ SERVER_PORT = os.getenv("SERVER_PORT")
 SERVER_HOST = os.getenv("SERVER_HOST")
 
 
-app = FastAPI()
+app = FastAPI(
+    title="TextingDuncan",
+    description="Custom SMS engine",
+    version="1.0.0"
+)
 
 
 @app.on_event("startup")
