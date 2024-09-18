@@ -22,7 +22,7 @@ SERVER_HOST = os.getenv("SERVER_HOST")
 
 app = FastAPI(
     title="TextingDuncan",
-    description="Custom SMS engine",
+    description="Custom SMS engine\nCreated by github.com/nikitair",
     version="1.0.0"
 )
 
