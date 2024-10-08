@@ -8,3 +8,11 @@ twilio==8.11.1
 phonenumbers
 isort
 loguru
+flask
+google-api-core==2.20.0
+google-api-python-client==2.147.0
+google-auth==2.35.0
+google-auth-httplib2==0.2.0
+google-auth-oauthlib==1.2.1
+googleapis-common-protos==1.65.0
+telnyx==2.1.3
