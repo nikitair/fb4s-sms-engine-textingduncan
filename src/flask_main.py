@@ -63,15 +63,15 @@ STOP_WORDS = [
 
 def set_up_credentials():
     credentials = None
-    if os.path.exists("token.json"):
-        credentials = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists("data.json"):
+        credentials = Credentials.from_authorized_user_file("data.json", SCOPES)
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
             credentials = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
+        with open("data.json", "w") as token:
             token.write(credentials.to_json())
 
     sheets = build("sheets", "v4", credentials=credentials).spreadsheets()
